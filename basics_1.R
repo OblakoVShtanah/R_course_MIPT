@@ -188,15 +188,39 @@ perform_analysis <- function(dataset) {
 iris_analysis <- perform_analysis(iris)
 mtcars_analysis <- perform_analysis(mtcars)
 
+# Преобразование результатов анализа в текст
+format_analysis <- function(analysis) {
+  text <- ""
+  text <- paste(text, "Dimensions: ", paste(analysis$dim, collapse = " x "), "\n", sep = "")
+  text <- paste(text, "Number of columns: ", analysis$ncol, "\n", sep = "")
+  text <- paste(text, "Number of rows: ", analysis$nrow, "\n", sep = "")
+  text <- paste(text, "First few rows: \n", paste(capture.output(print(analysis$head)), collapse = "\n"), "\n", sep = "")
+  text <- paste(text, "Last few rows: \n", paste(capture.output(print(analysis$tail)), collapse = "\n"), "\n", sep = "")
+  text <- paste(text, "Elements 16-20 of the 3rd column: ", paste(analysis$elements_16_20, collapse = ", "), "\n", sep = "")
+  text <- paste(text, "Sum: ", analysis$sum, "\n", sep = "")
+  text <- paste(text, "Mean: ", analysis$mean, "\n", sep = "")
+  text <- paste(text, "Standard deviation: ", analysis$sd, "\n", sep = "")
+  text <- paste(text, "Variance: ", analysis$var, "\n", sep = "")
+  text <- paste(text, "Elements less than 10: ", analysis$elements_less_than_10, "\n", sep = "")
+  text <- paste(text, "Elements less than 10 in each column: ", paste(analysis$col_elements_less_than_10, collapse = ", "), "\n", sep = "")
+  return(text)
+}
+
+iris_text <- format_analysis(iris_analysis)
+mtcars_text <- format_analysis(mtcars_analysis)
+
 # Дополнительный уровень 2: Создание презентации .pptx с результатами
 my_pres <- read_pptx()
 
 # Добавить слайды с анализом iris
 my_pres <- add_slide(my_pres, layout = "Title and Content", master = "Office Theme")
-my_pres <- ph_with(my_pres, value = "Iris Analysis", location = ph_location_type(type = "title"))
-my_pres <- ph_with(my_pres, value = iris_analysis, location = ph_location_type(type = "body"))
+my_pres <- ph_with(my_pres, type = "title", str = "Iris Analysis")
+my_pres <- ph_with(my_pres, type = "body", str = iris_text)
 
 # Добавить слайды с анализом mtcars
 my_pres <- add_slide(my_pres, layout = "Title and Content", master = "Office Theme")
-my_pres <- ph_with(my_pres, value = "Mtcars Analysis", location = ph_location_type(type = "title"))
-my_pres <- ph_with(my_pres, value = mtcars
+my_pres <- ph_with(my_pres, type = "title", str = "Mtcars Analysis")
+my_pres <- ph_with(my_pres, type = "body", str = mtcars_text)
+
+# Сохранить презентацию
+print(my_pres, target = "dataset_analysis.pptx")
