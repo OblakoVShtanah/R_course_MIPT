@@ -14,8 +14,8 @@ library(tibble)
 
 
 # Load the data
-data <- readRDS("/Users/doblakov/R/rstudio-export(1)/data.rds")
-metadata <- readRDS("/Users/doblakov/R/rstudio-export(1)/metadata.rds")
+data <- readRDS("rstudio-export(1)/data.rds")
+metadata <- readRDS("rstudio-export(1)/metadata.rds")
 
 # Calculate the maximum absolute difference in mean expression between males and females
 max_diff <- max(abs(colMeans(data[metadata$sex == "male",]) - colMeans(data[metadata$sex == "female",])))
